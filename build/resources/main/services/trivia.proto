@@ -1,0 +1,33 @@
+syntax = "proto3";
+
+package services;
+
+service TriviaGame {
+  // Request 1: Get a random trivia question
+  rpc getTriviaQuestion (TriviaRequest) returns (TriviaResponse) {}
+
+  // Request 2: Submit an answer to a trivia question
+  rpc submitTriviaAnswer (TriviaAnswerRequest) returns (TriviaAnswerResponse) {}
+}
+
+// Request message for getting a trivia question
+message TriviaRequest {
+  string category = 1;
+}
+
+// Response message for getting a trivia question
+message TriviaResponse {
+  string question = 1;
+  repeated string options = 2;
+}
+
+// Request message for submitting a trivia answer
+message TriviaAnswerRequest {
+  string answer = 1;
+}
+
+// Response message for submitting a trivia answer
+message TriviaAnswerResponse {
+  bool isCorrect = 1;
+  string explanation = 2;
+}
