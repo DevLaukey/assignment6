@@ -1,5 +1,7 @@
 package service;
 
+import io.grpc.stub.StreamObserver;
+
 import static io.grpc.MethodDescriptor.generateFullMethodName;
 
 /**
@@ -202,6 +204,8 @@ public final class LibraryGrpc {
                   this, METHODID_AVAILABLE)))
           .build();
     }
+
+      public abstract void available(google.protobuf.Empty request, StreamObserver<AvailableRes> responseObserver);
   }
 
   /**
