@@ -7,7 +7,7 @@ import service.*;
 import java.util.HashMap;
 import java.util.Map;
 
-public class LibraryImpl extends LibraryGrpc.LibraryImplBase {
+public  class LibraryImpl extends LibraryGrpc.LibraryImplBase {
 
     private final Map<Book, Integer> availableBooks = new HashMap<>();
     private final Map<String, Book> checkedOutBooks = new HashMap<>();
@@ -70,10 +70,7 @@ public class LibraryImpl extends LibraryGrpc.LibraryImplBase {
         responseObserver.onCompleted();
     }
 
-    @Override
-    public void available(google.protobuf.Empty request, StreamObserver<AvailableRes> responseObserver) {
 
-    }
 
 
     private void sendResponse(StreamObserver<LibraryRes> responseObserver, boolean isSuccess, String errorMessage) {
