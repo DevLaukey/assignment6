@@ -4,6 +4,8 @@ import com.google.protobuf.Empty;
 import io.grpc.Channel;
 import io.grpc.ManagedChannel;
 import io.grpc.ManagedChannelBuilder;
+
+import java.util.Arrays;
 import java.util.Scanner;
 import java.util.concurrent.TimeUnit;
 import service.*;
@@ -179,26 +181,77 @@ public class Client {
     }
   }
 
+
+
+  // TRIVIA
+
   public void playTrivia() {
-    String category = getUserInput("Enter the trivia category (General Knowledge, Science, History, Geography)");
-    Trivia.TriviaRequest triviaRequest = Trivia.TriviaRequest.newBuilder().setCategory(category).build();
+    try {
+      boolean playAgain = true;
 
-    Trivia.TriviaResponse triviaResponse = blockingStub7.getTriviaQuestion(triviaRequest);
+      while (playAgain) {
+        // Get trivia category from the user
+        String category = getUserInput("Enter the trivia category (General Knowledge, Science, History, Geography)");
 
-    System.out.println("Trivia Question: " + triviaResponse.getQuestion());
-    for (int i = 0; i < triviaResponse.getOptionsList().size(); i++) {
-      System.out.println((i + 1) + ". " + triviaResponse.getOptionsList().get(i));
+        // Check if the category is valid
+        if (!isValidTriviaCategory(category)) {
+          System.out.println("Invalid trivia category. Please choose a valid category.");
+          continue;
+        }
+
+        Trivia.TriviaRequest triviaRequest = Trivia.TriviaRequest.newBuilder().setCategory(category).build();
+
+        // Get trivia question from the server
+        Trivia.TriviaResponse triviaResponse = blockingStub7.getTriviaQuestion(triviaRequest);
+
+        System.out.println("Trivia Question: " + triviaResponse.getQuestion());
+
+        // Display relevant options for the trivia question
+        for (int i = 0; i < triviaResponse.getOptionsList().size(); i++) {
+          System.out.println((i + 1) + ". " + triviaResponse.getOptionsList().get(i));
+        }
+
+        // Get user's choice for the trivia answer
+        int userChoice = getUserChoice();
+        String userAnswer = triviaResponse.getOptionsList().get(userChoice - 1);
+
+        // Send trivia answer to the server
+        Trivia.TriviaAnswerRequest answerRequest = Trivia.TriviaAnswerRequest.newBuilder().setAnswer(userAnswer).build();
+        Trivia.TriviaAnswerResponse answerResponse = blockingStub7.submitTriviaAnswer(answerRequest);
+
+        // Display the result and explanation
+        System.out.println(answerResponse.getExplanation());
+
+        // Ask the user if they want to play again
+        int playAgainChoice = Integer.parseInt(getUserInput("Do you want to play again? (1. Yes, 2. No)"));
+
+
+        playAgain = (playAgainChoice == 1);
+      }
+
+      // Ask the user if they want to go back to the main menu
+      int continueChoice = Integer.parseInt(getUserInput("Do you want to go back to the top menu? (1. Yes, 2. No)"));
+      if (continueChoice == 1) {
+        // Show available services to the user
+        showAvailableServices();
+
+        // Get user's choice of service
+        int choice = getUserChoice();
+
+        // Execute the selected service
+        executeUserChoice(choice);
+      }
+    } catch (Exception e) {
+      // Handle any exceptions
+      System.err.println("An error occurred while playing trivia: " + e.getMessage());
+      e.printStackTrace();
     }
-
-    int userChoice = getUserChoice();
-    String userAnswer = triviaResponse.getOptionsList().get(userChoice - 1);
-
-    Trivia.TriviaAnswerRequest answerRequest = Trivia.TriviaAnswerRequest.newBuilder().setAnswer(userAnswer).build();
-    Trivia.TriviaAnswerResponse answerResponse = blockingStub7.submitTriviaAnswer(answerRequest);
-
-    System.out.println(answerResponse.getExplanation());
   }
 
+// Check if the trivia category is valid
+  private boolean isValidTriviaCategory(String category) {
+    return Arrays.asList("General Knowledge", "Science", "History", "Geography").contains(category);
+  }
 
   public void showAvailableServices() {
     System.out.println("Available Services:");
@@ -309,7 +362,6 @@ public class Client {
             exitService = true; // Exit the application
             break;
           default:
-            System.out.println("Invalid choice. Please choose a number between 1 and 6.");
             break;
         }
 
@@ -362,6 +414,8 @@ public class Client {
       System.err.println("An error occurred while processing the library option: " + e.getMessage());
     }
   }
+
+
 
 
   public static void main(String[] args) throws Exception {
