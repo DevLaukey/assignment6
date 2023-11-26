@@ -35,13 +35,13 @@ public class Node {
     // Here we are adding the different services that a client can call
     ArrayList<String> services = new ArrayList<>();
     server = ServerBuilder.forPort(port)
-        .addService(new EchoImpl())
-        .addService(new JokeImpl())
+            .addService(new EchoImpl())
+            .addService(new JokeImpl())
             .addService(new EncryptionImpl())
             .addService(new LibraryImpl())
             .addService(new TriviaGameImpl())
 
-        .addService(new RegistryAnswerImpl(services)).build().start();
+            .addService(new RegistryAnswerImpl(services)).build().start();
 
     for (var service : server.getServices()) {
       // returns the services that are available from this node
@@ -116,7 +116,7 @@ public class Node {
       regThread.start();
     }
 
-    
+
     server.start();
 
     server.blockUntilShutdown();

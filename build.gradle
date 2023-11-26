@@ -57,7 +57,7 @@ sourceSets {
  def registryHost = "localhost" // for reaching the classes registry node use "ser321test.duckdns.org"
  def protobufPort = 9000 // port where the protobuf registry runs on -- for reaching the classes registry node use 8080
  def jsonPort = 9001 // port where the json registry runs on
- def grpcPort = 9002 // port where the json registry runs on
+ def grpcPort = 9003 // port where the json registry runs on
 
  // port and host of a service node
  def servicePort = 8000; // port for the service node
