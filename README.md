@@ -14,7 +14,22 @@ This project is a distributed system using gRPC for communication.  It interacts
 
 
 
-## How to Run
+## How to Run without Registry
+
+### Run Node:
+
+```bash
+gradle runNode
+```
+
+### Run Client:
+
+```bash
+gradle Client
+```
+
+## How to Run wit Registry
+
 
 ### Run Registry Server:
 
@@ -31,7 +46,7 @@ gradle runRegistryServer -PgrpcPort=<grpcPort>
 ### Run Client:
 
 ```bash
-gradle runClient -PserviceHost=<serviceHost> -PservicePort=<servicePort> -PregistryHost=<registryHost> -PgrpcPort=<grpcPort> -Pmessage=<message> -PregOn=<regOn>
+gradle runClient -PserviceHost=<serviceHost> -PservicePort=<servicePort> -PregistryHost=<registryHost> -PgrpcPort=<grpcPort>  -PregOn=<regOn>
 ```
 
 ### Run Client2:
@@ -144,3 +159,8 @@ Allows users to submit an answer and provides feedback on correctness.
 
 
 ### ScreenCast
+TASK 1 and 2
+![demo](task1-2.gif)
+
+TASK 3
+![demo](task3.gif)
