@@ -229,18 +229,7 @@ public class Client {
         playAgain = (playAgainChoice == 1);
       }
 
-      // Ask the user if they want to go back to the main menu
-      int continueChoice = Integer.parseInt(getUserInput("Do you want to go back to the top menu? (1. Yes, 2. No)"));
-      if (continueChoice == 1) {
-        // Show available services to the user
-        showAvailableServices();
 
-        // Get user's choice of service
-        int choice = getUserChoice();
-
-        // Execute the selected service
-        executeUserChoice(choice);
-      }
     } catch (Exception e) {
       // Handle any exceptions
       System.err.println("An error occurred while playing trivia: " + e.getMessage());
@@ -367,7 +356,7 @@ public class Client {
 
         if (!exitService) {
           // After completing a service, ask if the user wants to go back to the top menu
-          int continueChoice = Integer.parseInt(getUserInput("Do you want to go back to the top menu? (1. Yes, 2. No)"));
+          int continueChoice = Integer.parseInt(getUserInput("Dqo you want to go back to the top menu? (1. Yes, 2. No)"));
           if (continueChoice != 1) {
             exitService = true; // Exit the loop and the current service
           } else {

@@ -37,6 +37,9 @@ public class Node {
     server = ServerBuilder.forPort(port)
             .addService(new EchoImpl())
             .addService(new JokeImpl())
+            .addService(new LibraryImpl())
+            .addService(new EncryptionImpl())
+            .addService(new TriviaGameImpl())
             .addService(new RegistryAnswerImpl(services)).build().start();
 
     for (var service : server.getServices()) {
