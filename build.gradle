@@ -162,6 +162,7 @@ task runClient(type: JavaExec) {
 
 // runs a client which will run some commands on a node and also on the registration node
 task runClient2(type: JavaExec) {
+    def registerOn =true
     dependsOn arguments
     classpath = sourceSets.main.runtimeClasspath
     description = "Run Client2"
@@ -173,11 +174,10 @@ task runClient2(type: JavaExec) {
     args registryHost
     args grpcPort
     args message
-    args regOn
+    args registerOn
 }
 // runs a service node which already has the echo and joke service included
 task runNode(type: JavaExec) {
-    def registerOn = true
   dependsOn arguments
   classpath = sourceSets.main.runtimeClasspath
   description = "Run Server"
@@ -188,7 +188,7 @@ task runNode(type: JavaExec) {
   args serviceHost
   args servicePort
   args nodeName
-  args registerOn
+  args regOn
 }
 
 
