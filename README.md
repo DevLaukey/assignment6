@@ -1,61 +1,146 @@
-# GRPC Services and Registry
+# gRPC Client Example
 
-The following folder contains a Registry.jar which includes a Registering service where Nodes can register to allow clients to find them and use their implemented GRPC services. 
+This project is a distributed system using gRPC for communication.  It interacts with various services, including an Echo service, Joke service, Library service, Encryption/Decryption service, and Trivia service. The client communicates with these services using Protocol Buffers and gRPC. The system also features a registry that keeps track of available services.
 
-Some more detailed explanations will follow and please also check the build.gradle file
+## Requirements Fulfilled
 
-## Run things locally without registry
-To run see also video. To run locally and without Registry which you should do for the beginning
+- gRPC Communication: Implemented a gRPC client-server architecture. Utilized gRPC for efficient and reliable communication between different services.
+- Utilized Protocol Buffers for message serialization.
+- Service Registry: Implemented a service registry for service discovery. Implemented a service registry to dynamically register and discover available services.
+- Encryption Service: Created an encryption service featuring a Caesar cipher for both encryption and decryption.
+- Library Management Service: Developed a library management service allowing users to check out and return books.
+- Trivia Game Service: Implemented a trivia game service with random questions and answers.
+- Added the project to amazon s3 instance.
 
-First Terminal
 
-    gradle runNode
 
-Second Terminal
+## How to Run
 
-    gradle runClient
+### Run Registry Server:
 
-## Run things locally with registry
+```bash
+gradle runRegistryServer -PgrpcPort=<grpcPort>
+```
 
-First terminal
+### Run Node (Service):
 
-    gradle runRegistryServer
+```bash
+gradle runRegistryServer -PgrpcPort=<grpcPort>
+```
 
-Second terminal
+### Run Client:
 
-    gradle runNode -PregOn=true 
+```bash
+gradle runClient -PserviceHost=<serviceHost> -PservicePort=<servicePort> -PregistryHost=<registryHost> -PgrpcPort=<grpcPort> -Pmessage=<message> -PregOn=<regOn>
+```
 
-Third Terminal
+### Run Client2:
 
-    gradle runClient -PregOn=true
+```bash
+gradle runClient2 -PserviceHost=<serviceHost> -PservicePort=<servicePort> -PregistryHost=<registryHost> -PgrpcPort=<grpcPort> -Pmessage=<message> -PregOn=true 
+```
 
-### gradle runRegistryServer
-Will run the Registry node on localhost (arguments are possible see gradle). This node will run and allows nodes to register themselves. 
+## Working with the Encryption Service
+### Encryption
+To encrypt a string, you need to make a gRPC call to the encrypt method.
 
-The Server allows Protobuf, JSON and gRPC. We will only be using gRPC
+- Request Message:
+EncryptRequest: Contains the string (input) to be encrypted.
+Response Message:
 
-### gradle runNode
-Will run a node with an Echo and Joke service. The node registers itself on the Registry. You can change the host and port the node runs on and this will register accordingly with the Registry
 
-### gradle runClient
-Will run a client which will call the services from the node, it talks to the node directly not through the registry. At the end the client does some calls to the Registry to pull the services, this will be needed later.
+- EncryptResponse: Indicates whether the operation was successful (isSuccess), provides the encrypted string (solution), and an error message (error) if applicable.
+### Decryption
+To decrypt a string, you need to make a gRPC call to the decrypt method.
 
-### gradle runDiscovery
-Will create a couple of threads with each running a node with services in JSON and Protobuf. This is just an example and not needed for assignment 6. 
+- Request Message:
+DecryptRequest: Contains the string (input) to be decrypted.
+Response Message:
 
-### gradle testProtobufRegistration
-Registers the protobuf nodes from runDiscovery and do some calls. 
+- DecryptResponse: Indicates whether the operation was successful (isSuccess), provides the decrypted string (solution), and an error message (error) if applicable.
 
-### gradle testJSONRegistration
-Registers the json nodes from runDiscovery and do some calls. 
+## Working with the Library Service
+### Checkout a Book
+To check out a book, a client needs to make a gRPC call to the checkout method.
 
-### gradle test
-Runs the test cases for Joke and Echo. It expects a new start of the server before running the tests!
-First run
-    gradle runNode
-then in second terminal
-    gradle test
+#### Request Message:
 
-To run in IDE:
-- go about it like in the ProtoBuf assignment to get rid of errors
-- all mains expect input, so if you want to run them in your IDE you need to provide the inputs for them, see build.gradle
+- LibraryReq: Contains the client's name (name) and the book to be checked out (book).
+#### Response Message:
+
+- LibraryRes: Indicates whether the checkout was successful (isSuccess), and an error message (error) if applicable.
+
+
+### Return a Book
+To return a book, a client needs to make a gRPC call to the returnBook method.
+
+#### Request Message:
+LibraryReq: Contains the client's name (name) and the book to be returned (book).
+
+#### Response Message:
+LibraryRes: Indicates whether the return was successful (isSuccess), and an error message (error) if applicable.
+
+### View Available Books
+To return a book, a client needs to make a gRPC call to the returnBook method.
+
+#### Request Message:
+
+google.protobuf.Empty: No additional information is required.
+#### Response Message:
+
+AvailableRes: Contains a list of available books (books).
+
+
+## Working with the Trivia Game Service
+### Get a Trivia Question
+
+To get a random trivia question, a client needs to make a gRPC call to the getTriviaQuestion method.
+
+
+#### Request Message:
+
+- TriviaRequest: Contains the category (category) of the trivia question.
+#### Response Message:
+
+- TriviaResponse: Contains the trivia question (question) and a list of possible options (options).
+
+
+### Submit a Trivia Answer
+To submit an answer to a trivia question, a client needs to make a gRPC call to the submitTriviaAnswer method.
+
+#### Request Message:
+TriviaAnswerRequest: Contains the submitted answer (answer).
+
+#### Response Message:
+TriviaAnswerResponse: Indicates whether the answer was correct (isCorrect), and provides an explanation (explanation).
+
+
+
+
+## Documentation
+### Encryption Service
+#### Encrypt Method:
+Shifts characters using a Caesar cipher.
+#### Decrypt Method:
+Reverses the encryption process.
+
+### Library Management Service
+#### Checkout Method:
+
+Allows users to check out books from the library.
+#### Return Method:
+
+Enables users to return books to the library.
+#### Available Method:
+
+Lists available books in the library.
+### Trivia Game Service
+#### Get Trivia Question:
+
+Retrieves a random trivia question based on the specified category.
+#### Submit Trivia Answer:
+
+Allows users to submit an answer and provides feedback on correctness.
+
+
+### ScreenCast
